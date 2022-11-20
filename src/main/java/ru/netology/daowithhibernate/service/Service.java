@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.netology.daowithhibernate.entity.Persons;
 import ru.netology.daowithhibernate.repository.Repository;
-
 import java.util.List;
 
 @NoArgsConstructor

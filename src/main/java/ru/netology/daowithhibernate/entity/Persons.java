@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Entity
 public class Persons {
 
-
     @Id
     private PersonsId personsId;
 
