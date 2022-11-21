@@ -2,6 +2,8 @@ package ru.netology.daowithhibernate.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 import ru.netology.daowithhibernate.entity.Persons;
 import ru.netology.daowithhibernate.entity.PersonsId;
@@ -18,7 +20,6 @@ public class Repository {
 
     private PersonsRepository personsRepository;
 
-    @Transactional
     public void addPersons() {
         List<Persons> listPerson = List.of(
                 new Persons(new PersonsId("Alex", "Petrov", 23), "21321325", "Moscow"),
@@ -32,16 +33,18 @@ public class Repository {
         personsRepository.saveAll(listPerson);
     }
 
-    @Transactional
-    public List<Persons> getPersonsByCity(String city) {
+    @Query("select p from Persons p where p.city = :city")
+    public List<Persons> getPersonsByCity(@Param("city") String city) {
         return personsRepository.findByCity(city);
     }
 
-    public List<Persons> getPersonsByAgeLessThan(int age) {
+    @Query("select p from Persons p where p.personsId.age < :age")
+    public List<Persons> getPersonsByAgeLessThan(@Param("age") int age) {
         return personsRepository.findByPersonsIdAgeLessThanOrderByPersonsIdAge(age);
     }
 
-    public Optional<Persons> getPersonByNameAndSurname(String name, String surname) {
+    @Query("select p from Persons p where p.personsId.name = :name and p.personsId.surname = :surname")
+    public Optional<Persons> getPersonByNameAndSurname(@Param("name") String name, @Param("surname") String surname) {
         return personsRepository.findByPersonsIdNameAndPersonsIdSurname(name, surname);
     }
 
