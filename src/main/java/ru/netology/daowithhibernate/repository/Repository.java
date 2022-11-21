@@ -1,20 +1,22 @@
 package ru.netology.daowithhibernate.repository;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 import ru.netology.daowithhibernate.entity.Persons;
 import ru.netology.daowithhibernate.entity.PersonsId;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
+@Component
+@AllArgsConstructor
 @Data
 public class Repository {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private PersonsRepository personsRepository;
 
     @Transactional
     public void addPersons() {
@@ -27,15 +29,21 @@ public class Repository {
                 new Persons(new PersonsId("Roman", "Kozlov", 15), "33345453458", "Moscow")
         );
 
-        for (Persons entity : listPerson) {
-            entityManager.persist(entity);
-        }
+        personsRepository.saveAll(listPerson);
     }
 
     @Transactional
     public List<Persons> getPersonsByCity(String city) {
-        Query query = entityManager.createQuery("select p from Persons p where p.city = :city order by p.personsId.name");
-        query.setParameter("city", city);
-        return (List<Persons>) query.getResultList();
+        return personsRepository.findByCity(city);
     }
+
+    public List<Persons> getPersonsByAgeLessThan(int age) {
+        return personsRepository.findByPersonsIdAgeLessThanOrderByPersonsIdAge(age);
+    }
+
+    public Optional<Persons> getPersonByNameAndSurname(String name, String surname) {
+        return personsRepository.findByPersonsIdNameAndPersonsIdSurname(name, surname);
+    }
+
+
 }

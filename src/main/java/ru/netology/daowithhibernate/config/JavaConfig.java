@@ -13,9 +13,4 @@ public class JavaConfig {
         return new Service(repository);
     }
 
-    @Bean
-    public Repository repository() {
-        return new Repository();
-    }
-
 }
