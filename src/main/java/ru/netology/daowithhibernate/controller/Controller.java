@@ -10,7 +10,6 @@ import ru.netology.daowithhibernate.entity.Persons;
 import ru.netology.daowithhibernate.service.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class Controller implements CommandLineRunner {
